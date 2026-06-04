@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://bboostxxx"]
+
+[ext_resource type="Script" path="res://boost.gd" id="1_boost"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_boost"]
+radius = 15.0
+
+[node name="Boost" type="Area2D" groups=["boosts"]]
+script = ExtResource("1_boost")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -15.0
+offset_top = -15.0
+offset_right = 15.0
+offset_bottom = 15.0
+color = Color(0.2, 0.2, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_boost")
