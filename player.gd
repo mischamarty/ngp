@@ -44,7 +44,7 @@ func _process(delta):
 	emit_signal("boost_changed", boost_level)
 
 	position += velocity * speed * delta
-	position.x = clamp(position.x, 25, screen_size.x - 25)
+	position.x = clamp(position.x, 70, 330) # Keep within road bounds (50-350 with margin)
 	position.y = clamp(position.y, 50, screen_size.y - 50)
 
 func add_boost(amount):

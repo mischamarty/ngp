@@ -6,22 +6,42 @@
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="GrassLeft" type="ColorRect" parent="."]
+offset_right = 50.0
+offset_bottom = 800.0
+color = Color(0.2, 0.6, 0.2, 1)
+
+[node name="GrassRight" type="ColorRect" parent="."]
+offset_left = 350.0
 offset_right = 400.0
 offset_bottom = 800.0
-color = Color(0.15, 0.15, 0.15, 1)
+color = Color(0.2, 0.6, 0.2, 1)
 
-[node name="RoadLine" type="ColorRect" parent="."]
-offset_left = 195.0
-offset_right = 205.0
+[node name="Road" type="ColorRect" parent="."]
+offset_left = 50.0
+offset_right = 350.0
 offset_bottom = 800.0
-color = Color(1, 1, 1, 0.5)
+color = Color(0.3, 0.3, 0.3, 1)
+
+[node name="EdgeLineLeft" type="ColorRect" parent="."]
+offset_left = 55.0
+offset_right = 60.0
+offset_bottom = 800.0
+color = Color(1, 1, 1, 1)
+
+[node name="EdgeLineRight" type="ColorRect" parent="."]
+offset_left = 340.0
+offset_right = 345.0
+offset_bottom = 800.0
+color = Color(1, 1, 1, 1)
+
+[node name="CenterLines" type="Node2D" parent="."]
 
 [node name="Player" parent="." instance=ExtResource("2_main")]
-position = Vector2(200, 600)
+position = Vector2(275, 600)
 
 [node name="EnemySpawnTimer" type="Timer" parent="."]
-wait_time = 1.5
+wait_time = 1.0
 
 [node name="BoostSpawnTimer" type="Timer" parent="."]
 wait_time = 3.0

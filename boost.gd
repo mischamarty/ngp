@@ -1,9 +1,15 @@
 extends Area2D
 
-var speed = 100.0
+var speed = 0.0 # Boosts are stationary on the road
+var main_node = null
 
 func _process(delta):
-	position.y += speed * delta
+	var player_speed = 300.0
+	if main_node and main_node.has_node("Player") and not main_node.game_over:
+		player_speed = main_node.get_node("Player").speed
 
-	if position.y > 900: # Assuming screen height is 800, delete when off screen
+	# Move towards the player at the speed of the road
+	position.y += player_speed * delta
+
+	if position.y > 900:
 		queue_free()
