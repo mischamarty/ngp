@@ -2,6 +2,7 @@ extends Node2D
 
 var enemy_scene = preload("res://enemy.tscn")
 var boost_scene = preload("res://boost.tscn")
+var police_scene = preload("res://police.tscn")
 
 var score = 0
 var game_over = false
@@ -92,3 +93,14 @@ func _on_player_hit():
 
 func _on_player_boost_changed(amount):
 	$UI/BoostLabel.text = "Boost: " + str(int(amount))
+
+func _on_player_wrong_lane_boost_collected():
+	if game_over: return
+
+	# 50% chance to spawn police when a boost is taken from the wrong lane
+	if randi() % 2 == 0:
+		var police = police_scene.instantiate()
+		# Spawn at the bottom of the screen in the left lane
+		police.position = Vector2(randf_range(70, 180), 900)
+		police.main_node = self
+		add_child(police)

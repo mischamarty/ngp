@@ -12,6 +12,7 @@ var screen_size: Vector2
 
 signal hit
 signal boost_changed(amount)
+signal wrong_lane_boost_collected
 
 func _ready():
 	screen_size = get_viewport_rect().size
@@ -58,4 +59,6 @@ func _on_area_entered(area):
 		emit_signal("hit")
 	elif area.is_in_group("boosts"):
 		add_boost(30)
+		if position.x < 195:
+			emit_signal("wrong_lane_boost_collected")
 		area.queue_free()

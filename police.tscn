@@ -1,0 +1,125 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpolicexxx"]
+
+[ext_resource type="Script" path="res://police.gd" id="1_police"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_police"]
+size = Vector2(40, 80)
+
+[node name="Police" type="Area2D" groups=["enemies"]]
+script = ExtResource("1_police")
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="Body" type="ColorRect" parent="Visuals"]
+offset_left = -18.0
+offset_top = -38.0
+offset_right = 18.0
+offset_bottom = 38.0
+color = Color(0.1, 0.1, 0.1, 1)
+
+[node name="BodyWhite" type="ColorRect" parent="Visuals"]
+offset_left = -16.0
+offset_top = -20.0
+offset_right = 16.0
+offset_bottom = 20.0
+color = Color(0.9, 0.9, 0.9, 1)
+
+[node name="Cabin" type="ColorRect" parent="Visuals"]
+offset_left = -14.0
+offset_top = -15.0
+offset_right = 14.0
+offset_bottom = 15.0
+color = Color(0.1, 0.1, 0.1, 0.8)
+
+[node name="Windshield" type="ColorRect" parent="Visuals"]
+offset_left = -12.0
+offset_top = -20.0
+offset_right = 12.0
+offset_bottom = -12.0
+color = Color(0.5, 0.8, 1, 0.8)
+
+[node name="RearWindow" type="ColorRect" parent="Visuals"]
+offset_left = -12.0
+offset_top = 10.0
+offset_right = 12.0
+offset_bottom = 20.0
+color = Color(0.5, 0.8, 1, 0.8)
+
+[node name="HeadlightLeft" type="ColorRect" parent="Visuals"]
+offset_left = -16.0
+offset_top = -40.0
+offset_right = -8.0
+offset_bottom = -35.0
+color = Color(1, 1, 0.8, 1)
+
+[node name="HeadlightRight" type="ColorRect" parent="Visuals"]
+offset_left = 8.0
+offset_top = -40.0
+offset_right = 16.0
+offset_bottom = -35.0
+color = Color(1, 1, 0.8, 1)
+
+[node name="TaillightLeft" type="ColorRect" parent="Visuals"]
+offset_left = -16.0
+offset_top = 35.0
+offset_right = -8.0
+offset_bottom = 40.0
+color = Color(1, 0, 0, 1)
+
+[node name="TaillightRight" type="ColorRect" parent="Visuals"]
+offset_left = 8.0
+offset_top = 35.0
+offset_right = 16.0
+offset_bottom = 40.0
+color = Color(1, 0, 0, 1)
+
+[node name="SirenLeft" type="ColorRect" parent="Visuals"]
+offset_left = -10.0
+offset_top = -10.0
+offset_right = -2.0
+offset_bottom = -5.0
+color = Color(1, 0, 0, 1)
+
+[node name="SirenRight" type="ColorRect" parent="Visuals"]
+offset_left = 2.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = -5.0
+color = Color(0, 0, 1, 1)
+
+[node name="WheelFrontLeft" type="ColorRect" parent="Visuals"]
+offset_left = -22.0
+offset_top = -25.0
+offset_right = -18.0
+offset_bottom = -13.0
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="WheelFrontRight" type="ColorRect" parent="Visuals"]
+offset_left = 18.0
+offset_top = -25.0
+offset_right = 22.0
+offset_bottom = -13.0
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="WheelRearLeft" type="ColorRect" parent="Visuals"]
+offset_left = -22.0
+offset_top = 20.0
+offset_right = -18.0
+offset_bottom = 32.0
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="WheelRearRight" type="ColorRect" parent="Visuals"]
+offset_left = 18.0
+offset_top = 20.0
+offset_right = 22.0
+offset_bottom = 32.0
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_police")
+
+[node name="SirenTimer" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true
+
+[connection signal="timeout" from="SirenTimer" to="." method="_on_siren_timer_timeout"]
