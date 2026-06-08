@@ -1,4 +1,4 @@
-extends Area2D
+extends CharacterBody2D
 
 const BASE_SPEED = 300.0
 const BOOST_SPEED_MULTIPLIER = 2.0
@@ -17,19 +17,25 @@ signal wrong_lane_boost_collected
 func _ready():
 	screen_size = get_viewport_rect().size
 
-func _process(delta):
-	var velocity = Vector2.ZERO
-	if Input.is_action_pressed("move_right"):
-		velocity.x += 1
-	if Input.is_action_pressed("move_left"):
-		velocity.x -= 1
-	if Input.is_action_pressed("move_down"):
-		velocity.y += 1
-	if Input.is_action_pressed("move_up"):
-		velocity.y -= 1
+	# Add AudioStreamPlayer for bounce
+	var audio = AudioStreamPlayer.new()
+	audio.name = "BounceSound"
+	audio.stream = preload("res://bounce.wav")
+	add_child(audio)
 
-	if velocity.length() > 0:
-		velocity = velocity.normalized()
+func _physics_process(delta):
+	var input_vector = Vector2.ZERO
+	if Input.is_action_pressed("move_right"):
+		input_vector.x += 1
+	if Input.is_action_pressed("move_left"):
+		input_vector.x -= 1
+	if Input.is_action_pressed("move_down"):
+		input_vector.y += 1
+	if Input.is_action_pressed("move_up"):
+		input_vector.y -= 1
+
+	if input_vector.length() > 0:
+		input_vector = input_vector.normalized()
 
 	var is_boosting = Input.is_action_pressed("boost") and boost_level > 0
 
@@ -44,21 +50,34 @@ func _process(delta):
 
 	emit_signal("boost_changed", boost_level)
 
-	position += velocity * speed * delta
-	position.x = clamp(position.x, 70, 330) # Keep within road bounds (50-350 with margin)
+	# Apply normal movement target, but allow velocity to carry bounce momentum
+	# If input is provided, smoothly transition back to input control
+	if input_vector != Vector2.ZERO:
+		velocity = velocity.lerp(input_vector * speed, 10 * delta)
+	else:
+		velocity = velocity.lerp(Vector2.ZERO, 5 * delta)
+
+	move_and_slide()
+
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		if collider and collider.is_in_group("enemies"):
+			# Bounce logic
+			var bounce_dir = collision.get_normal()
+			velocity = bounce_dir * 500 # bounce force
+			if collider.has_method("apply_bounce"):
+				collider.apply_bounce(-bounce_dir * 500)
+
+			if not $BounceSound.playing:
+				$BounceSound.play()
+
+	# clamp to grass/road area. Grass is 0-50, 350-400. Road is 50-350.
+	# Allow player to be pushed onto grass, but bounded by screen (25 to 375 with margin)
+	position.x = clamp(position.x, 25, 375)
 	position.y = clamp(position.y, 50, screen_size.y - 50)
 
 func add_boost(amount):
 	boost_level = min(boost_level + amount, MAX_BOOST)
 
-func _on_body_entered(body):
-	emit_signal("hit")
-
-func _on_area_entered(area):
-	if area.is_in_group("enemies"):
-		emit_signal("hit")
-	elif area.is_in_group("boosts"):
-		add_boost(30)
-		if position.x < 195:
-			emit_signal("wrong_lane_boost_collected")
-		area.queue_free()
+# Area signals were removed, boosts are now handled by boost.gd's body_entered

@@ -3,6 +3,7 @@ extends Node2D
 var enemy_scene = preload("res://enemy.tscn")
 var boost_scene = preload("res://boost.tscn")
 var police_scene = preload("res://police.tscn")
+var obstacle_scene = preload("res://obstacle.tscn")
 
 var score = 0
 var game_over = false
@@ -14,6 +15,7 @@ var line_height = 50.0
 func _ready():
 	$EnemySpawnTimer.start()
 	$BoostSpawnTimer.start()
+	$ObstacleSpawnTimer.start()
 	$ScoreTimer.start()
 	$UI/GameOverLabel.hide()
 	$UI/ScoreLabel.text = "Score: " + str(score)
@@ -74,6 +76,18 @@ func _on_boost_spawn_timer_timeout():
 	boost.main_node = self
 	add_child(boost)
 
+func _on_obstacle_spawn_timer_timeout():
+	if game_over: return
+	var obs = obstacle_scene.instantiate()
+	var side = randi() % 2
+	if side == 0:
+		obs.position = Vector2(randf_range(10, 40), -50) # Left grass
+	else:
+		obs.position = Vector2(randf_range(360, 390), -50) # Right grass
+
+	obs.main_node = self
+	add_child(obs)
+
 func _on_score_timer_timeout():
 	if game_over: return
 	score += 10
@@ -85,11 +99,19 @@ func _on_player_hit():
 	if game_over: return
 	game_over = true
 	$Player.hide()
-	$Player.set_deferred("monitoring", false)
+	$Player.set_physics_process(false)
 	$UI/GameOverLabel.show()
 	$EnemySpawnTimer.stop()
 	$BoostSpawnTimer.stop()
+	$ObstacleSpawnTimer.stop()
 	$ScoreTimer.stop()
+
+	# Spawn explosion on player
+	var explosion_scene = load("res://explosion.tscn")
+	if explosion_scene:
+		var explosion = explosion_scene.instantiate()
+		explosion.position = $Player.position
+		add_child(explosion)
 
 func _on_player_boost_changed(amount):
 	$UI/BoostLabel.text = "Boost: " + str(int(amount))

@@ -13,3 +13,22 @@ func _process(delta):
 
 	if position.y > 900:
 		queue_free()
+
+func _on_body_entered(body):
+	if body.name == "Player":
+		body.add_boost(30)
+		if position.x < 195 and body.has_user_signal("wrong_lane_boost_collected"):
+			body.emit_signal("wrong_lane_boost_collected")
+		elif position.x < 195:
+			# Fallback if signal isn't registered via has_user_signal for built-in
+			body.emit_signal("wrong_lane_boost_collected")
+
+		# Play sound
+		var audio = AudioStreamPlayer.new()
+		audio.stream = preload("res://boost.wav")
+		# Connect to finished signal to automatically free the audio node
+		audio.connect("finished", Callable(audio, "queue_free"))
+		get_parent().add_child(audio)
+		audio.play()
+		# delete self now
+		queue_free()

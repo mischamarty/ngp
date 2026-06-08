@@ -46,6 +46,9 @@ wait_time = 1.0
 [node name="BoostSpawnTimer" type="Timer" parent="."]
 wait_time = 3.0
 
+[node name="ObstacleSpawnTimer" type="Timer" parent="."]
+wait_time = 2.0
+
 [node name="ScoreTimer" type="Timer" parent="."]
 wait_time = 0.5
 
@@ -85,4 +88,5 @@ text = "Game Over!"
 [connection signal="wrong_lane_boost_collected" from="Player" to="." method="_on_player_wrong_lane_boost_collected"]
 [connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_enemy_spawn_timer_timeout"]
 [connection signal="timeout" from="BoostSpawnTimer" to="." method="_on_boost_spawn_timer_timeout"]
+[connection signal="timeout" from="ObstacleSpawnTimer" to="." method="_on_obstacle_spawn_timer_timeout"]
 [connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
