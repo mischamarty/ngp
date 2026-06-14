@@ -1,9 +1,9 @@
-extends Node2D
+extends Node3D
 
 func _ready():
-	$CPUParticles2D.emitting = true
-	$AudioStreamPlayer.stream = preload("res://explosion.wav")
-	$AudioStreamPlayer.play()
+	$CPUParticles3D.emitting = true
+	$AudioStreamPlayer3D.stream = preload("res://explosion.wav")
+	$AudioStreamPlayer3D.play()
 
 func _on_timer_timeout():
 	queue_free()

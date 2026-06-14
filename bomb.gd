@@ -1,16 +1,15 @@
-extends Area2D
+extends Area3D
 
-var speed = 0.0 # Stationary on grass
 var main_node = null
 
-func _process(delta):
-	var player_speed = 300.0
+func _physics_process(delta):
+	var player_speed = 20.0
 	if main_node and main_node.has_node("Player") and not main_node.game_over:
 		player_speed = main_node.get_node("Player").speed
 
-	position.y += player_speed * delta
+	position.z += player_speed * delta
 
-	if position.y > 900:
+	if position.z > 5:
 		queue_free()
 
 func _on_body_entered(body):
@@ -23,8 +22,8 @@ func _on_body_entered(body):
 			get_parent().add_child(explosion)
 
 		# Damage the entity
-		if body.name == "Player" and body.has_signal("hit"):
-			body.emit_signal("hit")
+		if body.name == "Player" and body.has_method("take_damage"):
+			body.take_damage()
 		elif body.is_in_group("enemies"):
 			body.queue_free()
 

@@ -1,98 +1,33 @@
-[gd_scene load_steps=3 format=3 uid="uid://cax2jxxx"]
+[gd_scene load_steps=5 format=3 uid="uid://cax2jxxx"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_xxx"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xxx"]
-size = Vector2(50, 100)
+[sub_resource type="BoxShape3D" id="BoxShape3D_player"]
+size = Vector3(1.5, 1.0, 3.0)
 
-[node name="Player" type="CharacterBody2D"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+albedo_color = Color(0.9, 0.1, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_body"]
+material = SubResource("StandardMaterial3D_body")
+size = Vector3(1.5, 0.5, 3.0)
+
+[node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_xxx")
 
-[node name="Visuals" type="Node2D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_player")
 
-[node name="Body" type="ColorRect" parent="Visuals"]
-offset_left = -20.0
-offset_top = -45.0
-offset_right = 20.0
-offset_bottom = 45.0
-color = Color(0.9, 0.1, 0.1, 1)
+[node name="Visuals" type="Node3D" parent="."]
 
-[node name="Cabin" type="ColorRect" parent="Visuals"]
-offset_left = -15.0
-offset_top = -20.0
-offset_right = 15.0
-offset_bottom = 15.0
-color = Color(0.1, 0.1, 0.1, 0.8)
+[node name="Body" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+mesh = SubResource("BoxMesh_body")
 
-[node name="Windshield" type="ColorRect" parent="Visuals"]
-offset_left = -12.0
-offset_top = -25.0
-offset_right = 12.0
-offset_bottom = -15.0
-color = Color(0.5, 0.8, 1, 0.8)
+[node name="Cabin" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -0.2)
+mesh = SubResource("BoxMesh_body")
+skeleton = NodePath("../Body")
 
-[node name="RearWindow" type="ColorRect" parent="Visuals"]
-offset_left = -12.0
-offset_top = 10.0
-offset_right = 12.0
-offset_bottom = 18.0
-color = Color(0.5, 0.8, 1, 0.8)
-
-[node name="HeadlightLeft" type="ColorRect" parent="Visuals"]
-offset_left = -18.0
-offset_top = -48.0
-offset_right = -10.0
-offset_bottom = -42.0
-color = Color(1, 1, 0.8, 1)
-
-[node name="HeadlightRight" type="ColorRect" parent="Visuals"]
-offset_left = 10.0
-offset_top = -48.0
-offset_right = 18.0
-offset_bottom = -42.0
-color = Color(1, 1, 0.8, 1)
-
-[node name="TaillightLeft" type="ColorRect" parent="Visuals"]
-offset_left = -18.0
-offset_top = 42.0
-offset_right = -10.0
-offset_bottom = 48.0
-color = Color(1, 0, 0, 1)
-
-[node name="TaillightRight" type="ColorRect" parent="Visuals"]
-offset_left = 10.0
-offset_top = 42.0
-offset_right = 18.0
-offset_bottom = 48.0
-color = Color(1, 0, 0, 1)
-
-[node name="WheelFrontLeft" type="ColorRect" parent="Visuals"]
-offset_left = -25.0
-offset_top = -30.0
-offset_right = -20.0
-offset_bottom = -15.0
-color = Color(0.2, 0.2, 0.2, 1)
-
-[node name="WheelFrontRight" type="ColorRect" parent="Visuals"]
-offset_left = 20.0
-offset_top = -30.0
-offset_right = 25.0
-offset_bottom = -15.0
-color = Color(0.2, 0.2, 0.2, 1)
-
-[node name="WheelRearLeft" type="ColorRect" parent="Visuals"]
-offset_left = -25.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = 35.0
-color = Color(0.2, 0.2, 0.2, 1)
-
-[node name="WheelRearRight" type="ColorRect" parent="Visuals"]
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 25.0
-offset_bottom = 35.0
-color = Color(0.2, 0.2, 0.2, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_xxx")
+[node name="BounceSound" type="AudioStreamPlayer3D" parent="."]

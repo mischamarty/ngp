@@ -1,32 +1,35 @@
-extends CharacterBody2D
+extends CharacterBody3D
 
-var speed = 400.0 # Much faster than the player
+var speed = 30.0 # Faster than player
 var main_node = null
 var is_siren_red = true
-var bounce_velocity = Vector2.ZERO
+var bounce_velocity = Vector3.ZERO
 
 func apply_bounce(b_vel):
 	bounce_velocity = b_vel
 
 func _ready():
-	var siren_audio = AudioStreamPlayer.new()
+	var siren_audio = AudioStreamPlayer3D.new()
 	siren_audio.name = "SirenSound"
 	siren_audio.stream = preload("res://siren.wav")
 	siren_audio.volume_db = -10.0
 	add_child(siren_audio)
 
 func _physics_process(delta):
-	var player_speed = 300.0
+	var player_speed = 20.0
 	if main_node and main_node.has_node("Player") and not main_node.game_over:
 		player_speed = main_node.get_node("Player").speed
 
+	# Police spawned behind player (Z = 10)
+	# Moves forward (negative Z) relative to player
 	var forward_movement = (player_speed - speed)
 
-	bounce_velocity = bounce_velocity.lerp(Vector2.ZERO, 5 * delta)
-	velocity = Vector2(0, forward_movement) + bounce_velocity
+	bounce_velocity = bounce_velocity.lerp(Vector3.ZERO, 5 * delta)
+	velocity = Vector3(0, 0, forward_movement) + bounce_velocity
 	move_and_slide()
 
-	if position.y < -150 or position.y > 1050 or position.x < -100 or position.x > 500: # Destroy when it gets far ahead or knocked off screen
+	# Despawn if it gets far ahead (Z < -50)
+	if position.z < -50 or position.x < -15 or position.x > 15:
 		queue_free()
 
 func _on_siren_timer_timeout():
@@ -35,8 +38,8 @@ func _on_siren_timer_timeout():
 
 	is_siren_red = !is_siren_red
 	if is_siren_red:
-		$Visuals/SirenLeft.color = Color(1, 0, 0, 1) # Red
-		$Visuals/SirenRight.color = Color(0, 0, 1, 0.3) # Dim blue
+		$Visuals/SirenLeft.light_energy = 5.0
+		$Visuals/SirenRight.light_energy = 1.0
 	else:
-		$Visuals/SirenLeft.color = Color(1, 0, 0, 0.3) # Dim red
-		$Visuals/SirenRight.color = Color(0, 0, 1, 1) # Blue
+		$Visuals/SirenLeft.light_energy = 1.0
+		$Visuals/SirenRight.light_energy = 5.0

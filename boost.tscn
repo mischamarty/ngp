@@ -1,21 +1,29 @@
-[gd_scene load_steps=3 format=3 uid="uid://bboostxxx"]
+[gd_scene load_steps=5 format=3 uid="uid://bboostxxx"]
 
 [ext_resource type="Script" path="res://boost.gd" id="1_boost"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_boost"]
-radius = 15.0
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_boost"]
+height = 0.5
+radius = 0.5
 
-[node name="Boost" type="Area2D" groups=["boosts"]]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_boost"]
+albedo_color = Color(0.2, 0.2, 1, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_boost"]
+material = SubResource("StandardMaterial3D_boost")
+top_radius = 0.5
+bottom_radius = 0.5
+height = 0.5
+
+[node name="Boost" type="Area3D" groups=["boosts"]]
 script = ExtResource("1_boost")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -15.0
-offset_top = -15.0
-offset_right = 15.0
-offset_bottom = 15.0
-color = Color(0.2, 0.2, 1, 1)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("CylinderShape3D_boost")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_boost")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+mesh = SubResource("CylinderMesh_boost")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

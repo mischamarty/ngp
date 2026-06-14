@@ -7,7 +7,6 @@ func _physics_process(delta):
 	if main_node and main_node.has_node("Player") and not main_node.game_over:
 		player_speed = main_node.get_node("Player").speed
 
-	# Move towards camera (+Z)
 	position.z += player_speed * delta
 
 	if position.z > 5:
@@ -15,13 +14,10 @@ func _physics_process(delta):
 
 func _on_body_entered(body):
 	if body.name == "Player":
-		if body.has_method("add_boost"):
-			body.add_boost(30)
+		if body.has_method("heal"):
+			body.heal(1)
 
-		# Oncoming lane is x < -1
-		if position.x < -1 and body.has_signal("wrong_lane_boost_collected"):
-			body.emit_signal("wrong_lane_boost_collected")
-
+		# Play a generic pickup sound or boost sound for now
 		var audio = AudioStreamPlayer3D.new()
 		audio.stream = preload("res://boost.wav")
 		audio.connect("finished", Callable(audio, "queue_free"))
