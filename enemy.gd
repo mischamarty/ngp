@@ -8,7 +8,7 @@ func apply_bounce(b_vel):
 	bounce_velocity = b_vel
 
 func _physics_process(delta):
-	var player_speed = 20.0
+	var player_speed = 0.0
 	var forward_movement = 0.0
 
 	if main_node and main_node.has_node("Player") and main_node.game_over == false:

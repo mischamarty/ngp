@@ -16,7 +16,7 @@ func _ready():
 	add_child(siren_audio)
 
 func _physics_process(delta):
-	var player_speed = 20.0
+	var player_speed = 0.0
 	if main_node and main_node.has_node("Player") and not main_node.game_over:
 		player_speed = main_node.get_node("Player").speed
 

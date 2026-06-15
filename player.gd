@@ -50,6 +50,13 @@ func _physics_process(delta):
 
 	move_and_slide()
 
+	# Animate wheels
+	var wheel_spin = speed * delta * 2.0
+	$Visuals/WheelFL.rotate_y(wheel_spin)
+	$Visuals/WheelFR.rotate_y(wheel_spin)
+	$Visuals/WheelRL.rotate_y(wheel_spin)
+	$Visuals/WheelRR.rotate_y(wheel_spin)
+
 	# Handle Bouncing with enemies
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
